@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const reportController_1 = require("../controllers/reportController");
+const router = express_1.default.Router();
+router.get('/all', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin', 'supervisor'), reportController_1.getAllReports);
+router.get('/site-safety', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin', 'supervisor'), reportController_1.getSiteSafetyReports);
+router.post('/me', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker'), reportController_1.createMyReport);
+router.get('/me/today', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker'), reportController_1.getMyTodayReport);
+router.get('/me', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker'), reportController_1.getMyReports);
+router.put('/me/:id/materials', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker'), reportController_1.addMaterials);
+router.post('/materials', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker'), reportController_1.createMaterials);
+router.get('/materials/stats', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker', 'supervisor', 'admin'), reportController_1.getMaterialsStats);
+router.get('/materials/list', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('worker', 'supervisor', 'admin'), reportController_1.getMaterialsList);
+router.put('/:id/approval', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), reportController_1.approveReport);
+router.put('/materials/:reportId/:materialId/status', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), reportController_1.updateMaterialStatus);
+router.get('/pending', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), reportController_1.getReportsPending);
+router.get('/materials/pending', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), reportController_1.getMaterialsPending);
+exports.default = router;

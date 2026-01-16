@@ -1,0 +1,27 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const attendanceController_1 = require("../controllers/attendanceController");
+const router = express_1.default.Router();
+router.get('/', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin', 'supervisor'), attendanceController_1.getAllLogs);
+router.get('/scans', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin', 'supervisor'), attendanceController_1.getScanLogs);
+router.get('/audit', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin'), attendanceController_1.getAuditLogs);
+router.get('/me/vitals', authMiddleware_1.protect, attendanceController_1.getMyVitals);
+router.get('/me/daily', authMiddleware_1.protect, attendanceController_1.getMyDaily);
+router.get('/me/weekly', authMiddleware_1.protect, attendanceController_1.getMyWeekly);
+router.get('/me/history', authMiddleware_1.protect, attendanceController_1.getMyHistory);
+router.get('/all-history', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin'), attendanceController_1.getAllHistory);
+router.get('/overview', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), attendanceController_1.getOverview);
+router.get('/today', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), attendanceController_1.getTodayAll);
+router.put('/:id/verify', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), attendanceController_1.verifyAttendance);
+router.put('/:id', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('admin'), attendanceController_1.updateAttendance);
+router.delete('/:id', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), attendanceController_1.deleteAttendance);
+router.post('/checkin', authMiddleware_1.protect, attendanceController_1.checkIn);
+router.post('/checkout', authMiddleware_1.protect, attendanceController_1.checkOut);
+router.post('/scan-qr', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), attendanceController_1.scanQR);
+router.post('/approve', authMiddleware_1.protect, (0, authMiddleware_1.authorize)('supervisor', 'admin'), attendanceController_1.approveAttendance);
+exports.default = router;

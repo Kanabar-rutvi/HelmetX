@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "html5-qrcode": "^2.3.8",
+    "react-qr-code": "^2.0.18"
+  }
+}
